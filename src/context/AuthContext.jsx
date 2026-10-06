@@ -47,8 +47,8 @@ export const AuthProvider = ({ children }) => {
     await api.login({ email, password })
   );
 
-  const register = async ({ fullName, email, password, role }) => establishSession(
-    await api.register({ fullName, email, password, role })
+  const register = async ({ fullName, email, password, role, campus, hostel }) => establishSession(
+    await api.register({ fullName, email, password, role, campus, hostel })
   );
 
   const logout = () => {

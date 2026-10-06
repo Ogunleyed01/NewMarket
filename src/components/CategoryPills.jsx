@@ -1,14 +1,21 @@
 import React from 'react';
 import { Sparkles, Utensils, Laptop, Shirt, Heart, BookOpen } from 'lucide-react';
 
-const CATEGORIES = [
-  { id: 'all', name: 'All Categories', icon: Sparkles },
-  { id: 'pastry', name: 'Hostel Eats & Bakes', icon: Utensils },
-  { id: 'tech', name: 'Tech & Dorm Gadgets', icon: Laptop },
-  { id: 'fashion', name: 'Campus Drip & Wear', icon: Shirt },
-  { id: 'beauty', name: 'Skincare & Dorm Glam', icon: Heart },
-  { id: 'books', name: 'Notes & Stationery', icon: BookOpen },
+export const CATEGORY_OPTIONS = [
+  { id: 'all', name: 'All Categories', icon: Sparkles, aliases: ['all'] },
+  { id: 'pastry', name: 'Hostel Eats & Bakes', icon: Utensils, aliases: ['pastry', 'food', 'eats', 'bakes', 'snacks'] },
+  { id: 'tech', name: 'Tech & Dorm Gadgets', icon: Laptop, aliases: ['tech', 'gadgets', 'electronics', 'device'] },
+  { id: 'fashion', name: 'Campus Drip & Wear', icon: Shirt, aliases: ['fashion', 'wear', 'clothing', 'apparel'] },
+  { id: 'beauty', name: 'Skincare & Dorm Glam', icon: Heart, aliases: ['beauty', 'skincare', 'glam', 'care'] },
+  { id: 'books', name: 'Notes & Stationery', icon: BookOpen, aliases: ['books', 'notes', 'stationery', 'study'] },
 ];
+
+export const normalizeCategory = (value = '') => String(value || '')
+  .toLowerCase()
+  .trim()
+  .replace(/&/g, ' and ')
+  .replace(/[^a-z0-9]+/g, '-')
+  .replace(/^-+|-+$/g, '');
 
 export const CategoryPills = ({ selectedCategory, onSelectCategory }) => {
   return (
@@ -18,7 +25,7 @@ export const CategoryPills = ({ selectedCategory, onSelectCategory }) => {
           <h2 className="text-base sm:text-lg font-extrabold text-slate-900 flex items-center gap-2">
             <span>Explore Campus Categories</span>
             <span className="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-bold">
-              {CATEGORIES.length}
+              {CATEGORY_OPTIONS.length}
             </span>
           </h2>
           <p className="text-xs text-slate-500">Filter verified student products by category</p>
@@ -26,9 +33,9 @@ export const CategoryPills = ({ selectedCategory, onSelectCategory }) => {
       </div>
 
       <div className="flex items-center gap-2.5 overflow-x-auto pb-2 scrollbar-none">
-        {CATEGORIES.map((cat) => {
+        {CATEGORY_OPTIONS.map((cat) => {
           const IconComponent = cat.icon;
-          const isSelected = selectedCategory === cat.id;
+          const isSelected = normalizeCategory(selectedCategory) === normalizeCategory(cat.id);
 
           return (
             <button

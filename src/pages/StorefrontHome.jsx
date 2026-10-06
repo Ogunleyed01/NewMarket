@@ -1,6 +1,6 @@
 import React from 'react';
 import { HeroBanner } from '../components/HeroBanner';
-import { CategoryPills } from '../components/CategoryPills';
+import { CategoryPills, normalizeCategory } from '../components/CategoryPills';
 import { StoreCard } from '../components/StoreCard';
 import { ProductCard } from '../components/ProductCard';
 import { Store, Sparkles, Flame, Tag, ShieldCheck } from 'lucide-react';
@@ -15,17 +15,20 @@ export const StorefrontHome = ({
   onRegisterStoreClick,
   selectedCampus
 }) => {
-  // Filter products by category & search query
+  const normalizedSelection = normalizeCategory(selectedCategory);
+
   const filteredProducts = products.filter((p) => {
-    const matchesCategory = selectedCategory === 'all' || p.category === selectedCategory;
-    const matchesSearch = searchQuery.trim() === '' || 
-      p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      p.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      p.storeName.toLowerCase().includes(searchQuery.toLowerCase());
+    const normalizedProductCategory = normalizeCategory(p.category);
+    const matchesCategory = normalizedSelection === 'all' || normalizedProductCategory === normalizedSelection;
+    const haystack = [p.name, p.description || '', p.storeName || '', p.category || '']
+      .join(' ')
+      .toLowerCase();
+    const query = (searchQuery || '').trim().toLowerCase();
+    const matchesSearch = query === '' || haystack.includes(query);
     return matchesCategory && matchesSearch;
   });
 
-  const bestsellers = products.filter(p => p.isBestseller);
+  const bestsellers = products.filter((p) => p.isBestseller);
 
   return (
     <div className="space-y-10">
@@ -63,9 +66,11 @@ export const StorefrontHome = ({
             </span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5">
             {stores.map((store) => (
-              <StoreCard key={store.id} store={store} onSelectStore={onSelectStore} />
+              <div key={store.id} className="h-full">
+                <StoreCard store={store} onSelectStore={onSelectStore} />
+              </div>
             ))}
           </div>
         </section>
@@ -90,9 +95,11 @@ export const StorefrontHome = ({
             </span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5">
             {bestsellers.slice(0, 4).map((product) => (
-              <ProductCard key={product.id} product={product} onSelectStore={onSelectStore} />
+              <div key={product.id} className="h-full">
+                <ProductCard product={product} onSelectStore={onSelectStore} />
+              </div>
             ))}
           </div>
         </section>
@@ -123,9 +130,11 @@ export const StorefrontHome = ({
             <p className="text-xs text-slate-500">Try adjusting your category filter or search query.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5 auto-rows-fr">
             {filteredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} onSelectStore={onSelectStore} />
+              <div key={product.id} className="h-full">
+                <ProductCard product={product} onSelectStore={onSelectStore} />
+              </div>
             ))}
           </div>
         )}

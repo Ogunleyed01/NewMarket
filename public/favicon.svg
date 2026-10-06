@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="NewMarket store logo">
+  <defs>
+    <linearGradient id="nm-brand" x1="0%" x2="100%" y1="0%" y2="100%">
+      <stop offset="0%" stop-color="#395082"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="30" fill="url(#nm-brand)"/>
+  <path d="M36 45h56l8 8v42c0 5.5-4.5 10-10 10H38c-5.5 0-10-4.5-10-10V53l8-8Z" fill="#F8FAFC" opacity="0.12"/>
+  <path d="M38 48h52l8 8v37c0 6.6-5.4 12-12 12H42c-6.6 0-12-5.4-12-12V56l8-8Zm14 0V40h24v8" fill="none" stroke="#F8FAFC" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M50 90V60h8l12 18V60h8v30h-8L58 72v18h-8Z" fill="#F8FAFC"/>
+  <circle cx="95" cy="36" r="9" fill="#FFB648"/>
+</svg>

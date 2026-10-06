@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { 
@@ -10,7 +10,6 @@ import {
   ShieldCheck, 
   ArrowRight, 
   ShoppingBag,
-  Sparkles,
   Lock
 } from 'lucide-react';
 
@@ -30,10 +29,19 @@ export const MultiVendorCartDrawer = ({ onNavigate }) => {
 
   const { user } = useAuth();
 
-  const [checkoutStep, setCheckoutStep] = useState('cart'); // 'cart' | 'checkout'
-  const [hostelAddress, setHostelAddress] = useState('Fajuyi Hall, Block 3, Room 14 (OAU)');
+  const [checkoutStep, setCheckoutStep] = useState('cart');
+  const [buyerName, setBuyerName] = useState(user?.fullName || '');
+  const [buyerEmail, setBuyerEmail] = useState(user?.email || '');
+  const [hostelAddress, setHostelAddress] = useState(user?.hostel || '');
   const [checkoutError, setCheckoutError] = useState('');
   const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (!user) return;
+    setBuyerName(user.fullName || '');
+    setBuyerEmail(user.email || '');
+    setHostelAddress(user.hostel || '');
+  }, [user]);
 
   if (!isCartOpen) return null;
 
@@ -48,8 +56,8 @@ export const MultiVendorCartDrawer = ({ onNavigate }) => {
     try {
       const result = await processCheckout({
         id: user.id,
-        fullName: user.fullName,
-        email: user.email,
+        fullName: buyerName,
+        email: buyerEmail,
         hostel: hostelAddress,
         campus: user.campus,
       });
@@ -200,8 +208,22 @@ export const MultiVendorCartDrawer = ({ onNavigate }) => {
               <div>
                 <label className="text-xs text-slate-700 font-bold block mb-1">Student Buyer Name</label>
                 <input 
-                  type="text" 
-                  defaultValue={user?.fullName || 'Tobi Adebayo'}
+                  type="text"
+                  value={buyerName}
+                  onChange={(e) => setBuyerName(e.target.value)}
+                  placeholder="Your full name"
+                  required
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 font-medium focus:outline-none focus:border-[#395082]"
+                />
+              </div>
+
+              <div>
+                <label className="text-xs text-slate-700 font-bold block mb-1">Email Address</label>
+                <input 
+                  type="email"
+                  value={buyerEmail}
+                  onChange={(e) => setBuyerEmail(e.target.value)}
+                  placeholder="you@example.com"
                   required
                   className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 font-medium focus:outline-none focus:border-[#395082]"
                 />
@@ -213,6 +235,7 @@ export const MultiVendorCartDrawer = ({ onNavigate }) => {
                   type="text" 
                   value={hostelAddress}
                   onChange={(e) => setHostelAddress(e.target.value)}
+                  placeholder="e.g. Moremi Hall, Block B, Room 11"
                   required
                   className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 font-medium focus:outline-none focus:border-[#395082]"
                 />

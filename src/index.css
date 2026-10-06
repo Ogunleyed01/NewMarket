@@ -3,8 +3,18 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-[#F8FAFC] text-[#111827] font-sans antialiased selection:bg-[#395082] selection:text-white;
+  }
+}
+
+@layer components {
+  .kv-card {
+    @apply rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-300 ease-out;
   }
 }
 

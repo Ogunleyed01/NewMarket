@@ -22,9 +22,9 @@ export const ProductCard = ({ product, onSelectStore }) => {
   };
 
   return (
-    <div className="group bg-white rounded-2xl border border-slate-200/90 hover:border-slate-300 shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden flex flex-col justify-between">
+    <div className="group h-full bg-white rounded-2xl border border-slate-200/90 hover:border-slate-300 shadow-sm hover:shadow-md transition-all duration-300 ease-out hover:-translate-y-1 overflow-hidden flex flex-col justify-between">
       
-      <div>
+      <div className="flex-1">
         {/* Product Image & Badges */}
         <div className="relative h-44 w-full overflow-hidden bg-slate-100">
           <img 
@@ -69,18 +69,18 @@ export const ProductCard = ({ product, onSelectStore }) => {
             </div>
           </div>
 
-          <h3 className="text-sm font-bold text-slate-900 group-hover:text-[#395082] transition line-clamp-1 mb-1">
+          <h3 className="text-sm font-bold text-slate-900 group-hover:text-[#395082] transition line-clamp-1 mb-1 min-h-[1.5rem]">
             {product.name}
           </h3>
 
-          <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed mb-2">
+          <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed mb-2 min-h-[2.5rem]">
             {product.description}
           </p>
         </div>
       </div>
 
       {/* Footer Price & Add to Cart */}
-      <div className="px-4 pb-3.5 pt-2 border-t border-slate-100 flex items-center justify-between bg-slate-50/40">
+      <div className="px-4 pb-3.5 pt-2 border-t border-slate-100 flex items-center justify-between bg-slate-50/40 gap-3">
         <div>
           <div className="flex items-baseline gap-1.5">
             <span className="text-sm sm:text-base font-extrabold text-slate-900">{formatPrice(product.price)}</span>
@@ -93,7 +93,7 @@ export const ProductCard = ({ product, onSelectStore }) => {
 
         <button
           onClick={handleAdd}
-          className={`px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition duration-150 shadow-sm ${
+          className={`px-3 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all duration-200 shadow-sm min-w-[94px] ${
             added
               ? 'bg-[#1b9e4b] text-white scale-105'
               : 'bg-[#395082] hover:bg-[#2c3f68] text-white'

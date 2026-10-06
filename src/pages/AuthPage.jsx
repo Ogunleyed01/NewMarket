@@ -1,6 +1,14 @@
 import React, { useState } from 'react';
-import { ArrowLeft, LockKeyhole, Store } from 'lucide-react';
+import { ArrowLeft, LockKeyhole, Store, MapPin } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+
+const CAMPUSES = [
+  'Obafemi Awolowo University (OAU)',
+  'University of Lagos (UNILAG)',
+  'University of Ibadan (UI)',
+  'Federal University of Technology Akure (FUTA)',
+  'University of Nigeria Nsukka (UNN)',
+];
 
 export const AuthPage = ({ mode, onNavigate }) => {
   const isSignup = mode === 'signup';
@@ -8,6 +16,8 @@ export const AuthPage = ({ mode, onNavigate }) => {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [campus, setCampus] = useState('');
+  const [hostel, setHostel] = useState('');
   const [role, setRole] = useState(
     new URLSearchParams(window.location.search).get('role') === 'VENDOR' ? 'VENDOR' : 'BUYER',
   );
@@ -20,7 +30,7 @@ export const AuthPage = ({ mode, onNavigate }) => {
     setSubmitting(true);
     try {
       if (isSignup) {
-        await register({ fullName, email, password, role });
+        await register({ fullName, email, password, campus, hostel, role });
       } else {
         await login(email, password);
       }
@@ -73,6 +83,33 @@ export const AuthPage = ({ mode, onNavigate }) => {
                   <option value="BUYER">Student buyer</option>
                   <option value="VENDOR">Student vendor</option>
                 </select>
+              </label>
+              <label className="block text-xs font-bold text-slate-700">
+                Campus
+                <div className="relative mt-1.5">
+                  <MapPin className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                  <select
+                    value={campus}
+                    onChange={(event) => setCampus(event.target.value)}
+                    required
+                    className="w-full appearance-none rounded-xl border border-slate-200 bg-slate-50 py-3 pl-9 pr-3 font-medium outline-none focus:border-[#395082]"
+                  >
+                    <option value="">Select your campus</option>
+                    {CAMPUSES.map((campusOption) => (
+                      <option key={campusOption} value={campusOption}>{campusOption}</option>
+                    ))}
+                  </select>
+                </div>
+              </label>
+              <label className="block text-xs font-bold text-slate-700">
+                Hostel / delivery point
+                <input
+                  type="text"
+                  value={hostel}
+                  onChange={(event) => setHostel(event.target.value)}
+                  placeholder="e.g. Moremi Hall, Block B, Room 11"
+                  className="mt-1.5 w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-3 font-medium outline-none focus:border-[#395082]"
+                />
               </label>
             </>
           )}

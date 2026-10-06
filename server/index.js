@@ -39,12 +39,15 @@ if (!fs.existsSync(uploadsDir)) {
 }
 
 function isCloudinaryConfigured() {
-  const { CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } = process.env;
-  if (!CLOUDINARY_CLOUD_NAME || !CLOUDINARY_API_KEY || !CLOUDINARY_API_SECRET) return false;
+  const cloudName = process.env.CLOUDINARY_CLOUD_NAME || process.env.CLOUDINARY_URL?.match(/cloudinary:\/\/[^:]+:[^@]+@([^/]+)/)?.[1];
+  const apiKey = process.env.CLOUDINARY_API_KEY || process.env.CLOUDINARY_URL?.match(/cloudinary:\/\/([^:]+):/)?.[1];
+  const apiSecret = process.env.CLOUDINARY_API_SECRET || process.env.CLOUDINARY_URL?.match(/cloudinary:\/\/[^:]+:([^@]+)/)?.[1];
+
+  if (!cloudName || !apiKey || !apiSecret) return false;
   if (
-    CLOUDINARY_CLOUD_NAME.startsWith('replace-with') ||
-    CLOUDINARY_API_KEY.startsWith('replace-with') ||
-    CLOUDINARY_API_SECRET.startsWith('replace-with')
+    cloudName.startsWith('replace-with') ||
+    apiKey.startsWith('replace-with') ||
+    apiSecret.startsWith('replace-with')
   ) {
     return false;
   }
@@ -59,16 +62,29 @@ function isPaystackConfigured() {
 }
 
 if (isCloudinaryConfigured()) {
+  const cloudName = process.env.CLOUDINARY_CLOUD_NAME || process.env.CLOUDINARY_URL?.match(/cloudinary:\/\/[^:]+:[^@]+@([^/]+)/)?.[1];
+  const apiKey = process.env.CLOUDINARY_API_KEY || process.env.CLOUDINARY_URL?.match(/cloudinary:\/\/([^:]+):/)?.[1];
+  const apiSecret = process.env.CLOUDINARY_API_SECRET || process.env.CLOUDINARY_URL?.match(/cloudinary:\/\/[^:]+:([^@]+)/)?.[1];
+
   cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
+    cloud_name: cloudName,
+    api_key: apiKey,
+    api_secret: apiSecret,
     secure: true,
   });
 }
 
 app.use(cors());
 app.use('/uploads', express.static(uploadsDir));
+
+app.get('/', (_req, res) => {
+  res.json({
+    name: 'NewMarket API',
+    status: 'running',
+    frontend: 'http://localhost:3000',
+    health: '/api/v1/health',
+  });
+});
 
 function safeUser(user) {
   const { passwordHash, ...publicUser } = user;
@@ -263,7 +279,7 @@ app.post('/api/v1/payments/webhook', express.raw({ type: 'application/json' }), 
 app.use(express.json({ limit: '1mb' }));
 
 app.post('/api/v1/auth/register', async (req, res) => {
-  const { fullName, email, password, role = 'BUYER' } = req.body;
+  const { fullName, email, password, role = 'BUYER', campus, hostel } = req.body;
   if (typeof fullName !== 'string' || !fullName.trim()) {
     return res.status(400).json({ error: 'Full name is required.' });
   }
@@ -276,11 +292,23 @@ app.post('/api/v1/auth/register', async (req, res) => {
   if (!['BUYER', 'VENDOR'].includes(role)) {
     return res.status(400).json({ error: 'Choose either a buyer or vendor account.' });
   }
+  const normalizedCampus = typeof campus === 'string' ? campus.trim() : '';
+  const normalizedHostel = typeof hostel === 'string' ? hostel.trim() : '';
+  if (!normalizedCampus) {
+    return res.status(400).json({ error: 'Please choose your campus before continuing.' });
+  }
 
   try {
     const passwordHash = await bcrypt.hash(password, 12);
     const user = await prisma.user.create({
-      data: { fullName: fullName.trim(), email: email.trim().toLowerCase(), passwordHash, role },
+      data: {
+        fullName: fullName.trim(),
+        email: email.trim().toLowerCase(),
+        passwordHash,
+        role,
+        campus: normalizedCampus || null,
+        hostel: normalizedHostel || null,
+      },
     });
     const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '7d' });
     return res.status(201).json({ token, user: safeUser(user) });

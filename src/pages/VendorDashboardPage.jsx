@@ -38,6 +38,8 @@ export const VendorDashboardPage = ({ store, products, onAddProductClick, onRegi
     .filter((item) => item.paymentStatus === 'PAID')
     .reduce((sum, item) => sum + item.unitPrice * item.quantity, 0);
 
+  const uniqueBuyers = new Set(vendorSubOrders.map((item) => item.buyerEmail || item.buyerName)).size;
+
   const handleStatusChange = async (_orderId, itemId, newStatus) => {
     setError('');
     try {
@@ -119,7 +121,7 @@ export const VendorDashboardPage = ({ store, products, onAddProductClick, onRegi
           </div>
           <p className="text-2xl font-extrabold text-slate-900">{vendorSubOrders.length}</p>
           <p className="text-[11px] text-[#395082] font-semibold">
-            From {orders.length} Student Buyers
+            From {uniqueBuyers} Student Buyers
           </p>
         </div>
 
@@ -150,7 +152,7 @@ export const VendorDashboardPage = ({ store, products, onAddProductClick, onRegi
 
           {/* Status Filter Tabs */}
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
-            {['ALL', 'PENDING', 'PROCESSING', 'READY_FOR_PICKUP', 'DELIVERED'].map((st) => (
+            {['ALL', 'PROCESSING', 'READY_FOR_PICKUP', 'DELIVERED', 'CANCELLED'].map((st) => (
               <button
                 key={st}
                 onClick={() => setFilterStatus(st)}
@@ -204,7 +206,6 @@ export const VendorDashboardPage = ({ store, products, onAddProductClick, onRegi
                     disabled={subOrder.paymentStatus !== 'PAID'}
                     className="px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-xs font-bold text-[#395082] focus:outline-none focus:ring-1 focus:ring-[#395082]"
                   >
-                    <option value="PENDING">PENDING PAYMENT</option>
                     <option value="PROCESSING">PROCESSING</option>
                     <option value="READY_FOR_PICKUP">READY FOR PICKUP</option>
                     <option value="DELIVERED">DELIVERED</option>
