@@ -15,6 +15,7 @@ dotenv.config();
 const app = express();
 const prisma = new PrismaClient();
 const PORT = process.env.PORT || 5000;
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
 const configuredJwtSecret = process.env.JWT_SECRET;
 const isValidJwtSecret = typeof configuredJwtSecret === 'string' && configuredJwtSecret.length >= 32;
 const JWT_SECRET = isValidJwtSecret
@@ -74,14 +75,22 @@ if (isCloudinaryConfigured()) {
   });
 }
 
-app.use(cors());
+app.use(cors({
+  origin: [
+    FRONTEND_URL,
+    'http://localhost:3000',
+    'http://localhost:5173',
+    'https://newmarket-blush.vercel.app',
+  ],
+  credentials: true,
+}));
 app.use('/uploads', express.static(uploadsDir));
 
 app.get('/', (_req, res) => {
   res.json({
     name: 'NewMarket API',
     status: 'running',
-    frontend: 'http://localhost:3000',
+    frontend: FRONTEND_URL,
     health: '/api/v1/health',
   });
 });
@@ -553,7 +562,7 @@ app.post('/api/v1/orders/checkout', authenticateToken, async (req, res) => {
       (sum, product) => sum + product.price * requestedItems.get(product.id),
       0,
     );
-    const callbackUrl = process.env.PAYSTACK_CALLBACK_URL || 'http://localhost:3000/payment/callback';
+    const callbackUrl = process.env.PAYSTACK_CALLBACK_URL || `${FRONTEND_URL}/payment/callback`;
     const paystackActive = isPaystackConfigured();
 
     const order = await prisma.orders.create({

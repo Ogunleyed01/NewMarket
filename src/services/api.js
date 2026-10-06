@@ -1,4 +1,4 @@
-const API_BASE = '/api/v1';
+const API_BASE = import.meta.env.VITE_API_URL || '/api/v1';
 
 async function request(path, options = {}) {
   const token = Object.hasOwn(options, 'token') ? options.token : localStorage.getItem('newmarket_token');
