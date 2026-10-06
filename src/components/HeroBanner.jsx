@@ -135,7 +135,7 @@ export const HeroBanner = ({ onExploreClick, onRegisterStoreClick }) => {
   const FooterIcon = slide.footerIcon;
 
   return (
-    <div className={`relative overflow-hidden rounded-3xl bg-gradient-to-br ${slide.bgGradient} text-white p-7 sm:p-10 mb-8 shadow-md transition-colors duration-700`}>
+    <div className={`relative overflow-hidden rounded-3xl bg-gradient-to-br ${slide.bgGradient} text-white p-5 sm:p-7 md:p-10 mb-8 shadow-md transition-colors duration-700`}>
       {/* Decorative Glow Elements */}
       <div className={`absolute top-0 right-0 w-80 h-80 ${slide.glowColors[0]} rounded-full blur-3xl pointer-events-none transition-colors duration-700`}></div>
       <div className={`absolute bottom-0 left-1/3 w-64 h-64 ${slide.glowColors[1]} rounded-full blur-3xl pointer-events-none transition-colors duration-700`}></div>
@@ -168,7 +168,7 @@ export const HeroBanner = ({ onExploreClick, onRegisterStoreClick }) => {
             <span className="text-[#ff7e00] font-bold">{slide.tagAccent}</span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">
+          <h1 className="text-[2rem] sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-[1.05] md:leading-tight">
             {slide.headline}
           </h1>
 
@@ -177,7 +177,7 @@ export const HeroBanner = ({ onExploreClick, onRegisterStoreClick }) => {
           </p>
 
           {/* Key Value Badges */}
-          <div className="grid grid-cols-3 gap-3 pt-3 border-t border-white/10">
+          <div className="grid grid-cols-3 gap-2 sm:gap-3 pt-3 border-t border-white/10">
             {slide.stats.map((stat, idx) => (
               <div key={idx}>
                 <div className={`text-lg sm:text-xl font-extrabold ${stat.color}`}>{stat.value}</div>
@@ -208,7 +208,7 @@ export const HeroBanner = ({ onExploreClick, onRegisterStoreClick }) => {
 
         {/* Right Column Visual Showcase Cards */}
         <div className={`lg:col-span-5 relative transition-all duration-500 ${isTransitioning ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
-          <div className="grid grid-cols-2 gap-3.5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
             
             {/* Vendor Card Preview 1 */}
             <div className="bg-white rounded-2xl p-3.5 shadow-lg border border-slate-100 text-slate-900 transform hover:-translate-y-1 transition duration-200">
@@ -220,7 +220,7 @@ export const HeroBanner = ({ onExploreClick, onRegisterStoreClick }) => {
                 />
                 <div className="min-w-0">
                   <h4 className="text-xs font-bold text-slate-900 truncate">{slide.image1.name}</h4>
-                  <p className="text-[10px] text-[#1b9e4b] font-semibold">{slide.image1.location}</p>
+                  <p className="text-[10px] text-[#1b9e4b] font-semibold truncate">{slide.image1.location}</p>
                 </div>
               </div>
               <img 
@@ -244,7 +244,7 @@ export const HeroBanner = ({ onExploreClick, onRegisterStoreClick }) => {
                 />
                 <div className="min-w-0">
                   <h4 className="text-xs font-bold text-slate-900 truncate">{slide.image2.name}</h4>
-                  <p className="text-[10px] text-[#395082] font-semibold">{slide.image2.location}</p>
+                  <p className="text-[10px] text-[#395082] font-semibold truncate">{slide.image2.location}</p>
                 </div>
               </div>
               <img 

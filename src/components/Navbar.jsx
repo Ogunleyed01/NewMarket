@@ -42,36 +42,47 @@ export const Navbar = ({
 
   return (
     <header className="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
-      <div className="container mx-auto px-4 py-3">
-        <div className="flex items-center justify-between gap-4">
-          
-          {/* Logo & Campus Location Dropdown */}
-          <div className="flex items-center gap-5">
+      <div className="container mx-auto px-3 sm:px-4 py-3">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center justify-between gap-3 w-full sm:w-auto">
             <button 
               onClick={() => setActiveView('home')} 
-              className="flex items-center gap-2.5 text-left group focus:outline-none"
+              className="flex min-w-0 items-center gap-2.5 text-left group focus:outline-none"
             >
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#395082] to-[#111827] flex items-center justify-center text-white shadow-sm group-hover:scale-105 transition-transform duration-200">
-                <Store className="w-5 h-5" />
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-[#395082] to-[#111827] flex items-center justify-center text-white shadow-sm group-hover:scale-105 transition-transform duration-200 shrink-0">
+                <Store className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
-              <div>
-                <div className="flex items-center gap-1.5">
-                  <span className="text-xl font-extrabold tracking-tight text-[#111827]">
+              <div className="min-w-0">
+                <div className="flex items-center gap-1.5 min-w-0">
+                  <span className="text-lg sm:text-xl font-extrabold tracking-tight text-[#111827] whitespace-nowrap">
                     New<span className="text-[#395082]">Market</span>
                   </span>
-                  <span className="text-[10px] font-bold px-1.5 py-0.5 bg-[#e5ecf5] text-[#395082] rounded">
+                  <span className="hidden sm:inline text-[9px] sm:text-[10px] font-bold px-1.5 py-0.5 bg-[#e5ecf5] text-[#395082] rounded whitespace-nowrap">
                     CAMPUS
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-500 font-medium -mt-0.5">Verified Student Marketplace</p>
+                <p className="text-[10px] sm:text-[11px] text-slate-500 font-medium -mt-0.5 truncate">Verified Student Marketplace</p>
               </div>
             </button>
 
-  
+            <div className="ml-auto flex items-center gap-2 sm:hidden">
+              <button
+                onClick={() => setIsCartOpen(true)}
+                className="relative p-2 rounded-xl bg-slate-100 text-[#111827]"
+                title="Cart"
+              >
+                <ShoppingBag className="w-4 h-4" />
+                {totalCartCount > 0 && (
+                  <span className="absolute -top-1.5 -right-1.5 bg-[#ff7e00] text-white font-extrabold text-[9px] w-4 h-4 rounded-full flex items-center justify-center">
+                    {totalCartCount}
+                  </span>
+                )}
+              </button>
+            </div>
           </div>
 
           {/* Search Bar */}
-          <div className="flex-1 max-w-lg relative hidden lg:block">
+          <div className="flex-1 max-w-xl relative hidden lg:block">
             <div className="relative">
               <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
@@ -93,12 +104,12 @@ export const Navbar = ({
           </div>
 
           {/* Navigation Action Buttons */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex flex-wrap items-center justify-end gap-1.5 sm:gap-2 min-w-0">
             
             {/* Explore Button */}
             <button
               onClick={() => setActiveView('home')}
-              className={`px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition ${
+              className={`px-2.5 sm:px-3 py-2 rounded-xl text-[10px] sm:text-xs font-semibold flex items-center gap-1.5 transition ${
                 activeView === 'home' 
                   ? 'bg-slate-100 text-[#395082] font-bold' 
                   : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
@@ -111,7 +122,7 @@ export const Navbar = ({
             {/* My Orders Button */}
             <button
               onClick={() => setActiveView('my-orders')}
-              className={`px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition relative ${
+              className={`px-2.5 sm:px-3 py-2 rounded-xl text-[10px] sm:text-xs font-semibold flex items-center gap-1.5 transition relative ${
                 activeView === 'my-orders' 
                   ? 'bg-slate-100 text-[#395082] font-bold' 
                   : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
@@ -140,7 +151,7 @@ export const Navbar = ({
             ) : (
               <button
                 onClick={onOpenRegisterStore}
-                className="px-3.5 py-2 rounded-xl text-xs font-bold text-[#ff7e00] bg-orange-50 hover:bg-orange-100 border border-orange-200 flex items-center gap-1.5 transition"
+                className="px-2.5 sm:px-3.5 py-2 rounded-xl text-[10px] sm:text-xs font-bold text-[#ff7e00] bg-orange-50 hover:bg-orange-100 border border-orange-200 flex items-center gap-1.5 transition"
               >
                 <PlusCircle className="w-4 h-4" />
                 <span className="hidden sm:inline">{user?.role === 'VENDOR' ? 'Set up your store' : 'Sell on NewMarket'}</span>
@@ -150,10 +161,10 @@ export const Navbar = ({
             {/* Unified Cart Toggle */}
             <button
               onClick={() => setIsCartOpen(true)}
-              className="relative p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-[#111827] transition group"
+              className="relative p-2 sm:p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-[#111827] transition group hidden sm:block"
               title="View Unified Shopping Cart"
             >
-              <ShoppingBag className="w-5 h-5 group-hover:scale-105 transition-transform" />
+              <ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-105 transition-transform" />
               {totalCartCount > 0 && (
                 <span className="absolute -top-1.5 -right-1.5 bg-[#ff7e00] text-white font-extrabold text-[10px] w-5 h-5 rounded-full flex items-center justify-center shadow-sm">
                   {totalCartCount}
@@ -162,11 +173,11 @@ export const Navbar = ({
             </button>
 
             {!user ? (
-              <div className="flex items-center gap-2">
-                <button onClick={() => onNavigate('/login')} className="rounded-xl px-3 py-2 text-xs font-bold text-slate-700 hover:bg-slate-100">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <button onClick={() => onNavigate('/login')} className="rounded-xl px-2.5 sm:px-3 py-2 text-[10px] sm:text-xs font-bold text-slate-700 hover:bg-slate-100">
                   Sign in
                 </button>
-                <button onClick={() => onNavigate('/signup')} className="rounded-xl bg-[#395082] px-3 py-2 text-xs font-bold text-white hover:bg-[#2c3f68]">
+                <button onClick={() => onNavigate('/signup')} className="rounded-xl bg-[#395082] px-2.5 sm:px-3 py-2 text-[10px] sm:text-xs font-bold text-white hover:bg-[#2c3f68]">
                   Sign up
                 </button>
               </div>
