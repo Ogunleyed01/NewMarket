@@ -12,3 +12,5 @@ services:
         value: production
       - key: PORT
         value: 10000
+      - key: DATABASE_URL
+        value: postgresql://newmarket_user:MGEigByhBXqXMYsnEYaBC0ivpAObiwWP@dpg-db2n08mk1f9s739enk9g-a.oregon-postgres.render.com/newmarket
